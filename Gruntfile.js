@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 			},
 			build: {
 				files: {
-					'dist/js/scripts.min.js': 'src/**/*.js'
+					'src/js/scripts.min.js': 'src/**/*.js'
 				}
 			},
 			prod: {
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 					style: 'expanded'
 				},
 				files: {
-					'dist/css/style.css': 'src/sass/style.scss'
+					'src/css/style.css': 'src/sass/style.scss'
 				}
 			},
 			prod: {
@@ -56,6 +56,26 @@ module.exports = function(grunt) {
 			}
 		},
 
+		//copy
+		copy: {
+			build: {
+				cwd: 'src',
+				src: [
+					'**/*.html', 
+					'**/*.php'
+				],
+				dest: 'build',
+				expand: true
+			},
+		},
+
+		//clean
+		clean: {
+			build: {
+				src: ['build']
+			},
+		},
+
 		//cssmin
 		cssmin: {
 			options: {
@@ -63,13 +83,13 @@ module.exports = function(grunt) {
 			},
 			build: {
 				files: {
-					'build/css/style.min.css': 'dist/css/style.css'
+					'build/css/style.min.css': 'src/css/style.css'
 				}
 			}
 		},
 
-		//watch
-		watch: {
+		//watch 
+		watch: { 
 			css: {
 				files: 'src/**/*.scss',
 				tasks: ['sass:build']
@@ -81,13 +101,30 @@ module.exports = function(grunt) {
 
 		},
 
+
+		//browserSync
+		browserSync: {
+			dev: {
+				bsFiles: {
+					src: [
+						'src/*.php',
+						'src/*.html',
+						'src/css/*.css'
+					]
+				},
+				options: {
+					watchTask: true,
+					server: './src'
+				}
+			},
+		},
 		
 
 	});
 	
 	//Register Tasks
-	grunt.registerTask('default', ['watch']); 
-	grunt.registerTask('build', ['sass:prod', 'uglify:prod', 'cssmin']);
+	grunt.registerTask('default', ['browserSync', 'watch']); 
+	grunt.registerTask('build', ['clean', 'copy', 'sass:prod', 'uglify:prod', 'cssmin']);
 
 	// ===========================================================================
 	// LOAD GRUNT PLUGINS ========================================================
@@ -98,6 +135,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-browser-sync');

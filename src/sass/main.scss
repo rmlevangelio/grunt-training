@@ -4,5 +4,15 @@ body {
 }
 
 header {
-	background-color: blue;
+	background-color: blue; 
 }
+
+.container {
+	width: 1000px; 
+	margin: 0 auto;
+	padding-left: $gutter-width;
+	padding-right: $gutter-width;
+	background-color: red;
+	position: relative;
+	height: 500px; 
+}   
